@@ -15,6 +15,7 @@ equal.addEventListener("click", ()=> {
 const decimal = document.querySelector(".decimal");
 
 const clear = document.querySelector(".clear");
+clear.addEventListener("click", clearCalculator);
 
 const numberButtons = document.querySelectorAll(".number");
 
@@ -27,6 +28,10 @@ numberButtons.forEach((btn) => {
 });
 
 function handleNumber(number) {
+    if(previousNum !== "" && currentNum !== "" && operator === ""){
+        previousNum ="";
+        currentDisplayNumber.textContent = currentNum;
+    };
     if (currentNum.length <= 10) {
         currentNum += number;
         currentDisplayNumber.textContent = currentNum;
@@ -40,11 +45,24 @@ operators.forEach(btn=> {
 });
 
 function handleOperator(op) {
-    operator = op;
-    previousNum = currentNum;
+    if (previousNum === "") {
+        previousNum = currentNum;
+        operatorCheck(op);
+    } else if (currentNum === "") {
+        operatorCheck(op);
+    } else {
+        calculate();
+        operator = op;
+        currentDisplayNumber.textContent = 0;
+        previousDisplayNumber.textContent = previousNum + " " + operator;
+    }
+}
+
+function operatorCheck(text) {
+    operator = text;
     previousDisplayNumber.textContent = previousNum + " " + operator;
+    currentDisplayNumber.textContent = "0";
     currentNum = "";
-    currentDisplayNumber.textContent = "";
 }
 
 function calculate() {
@@ -76,11 +94,20 @@ function roundNumber(num) {
 };
 
 function displayResults() {
-    previousDisplayNumber.textContent = "";
-    operator = "";
     if(previousNum.length <=10) {
         currentDisplayNumber.textContent = previousNum
     } else {
         currentDisplayNumber.textContent = previousNum.slice(0, 10) + "...";
     };
+    previousDisplayNumber.textContent = "";
+    operator = "";
+    currentNum = "";
 };
+
+function clearCalculator() {
+    currentNum = "";
+    previousNum = "";
+    operator = "";
+    currentDisplayNumber.textContent = "0"
+    previousDisplayNumber.textContent = "";
+}
