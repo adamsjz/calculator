@@ -6,6 +6,7 @@ const currentDisplayNumber = document.querySelector(".currentNumber");
 const previousDisplayNumber = document.querySelector(".previousNumber");
 
 const equal = document.querySelector(".equal");
+equal.addEventListener("click", calculate);
 
 const decimal = document.querySelector(".decimal");
 
@@ -28,4 +29,33 @@ function handleNumber(number) {
     };
 };
 
+operators.forEach(btn=> {
+    btn.addEventListener("click", (e) => {
+        handleOperator(e.target.textContent);
+    });
+});
 
+function handleOperator(op) {
+    operator = op;
+    previousNum = currentNum;
+    previousDisplayNumber.textContent = previousNum + " " + operator;
+    currentNum = "";
+    currentDisplayNumber.textContent = "";
+}
+
+function calculate() {
+    previousNum = Number(previousNum);
+    currentNum = Number(currentNum);
+
+    if(operator === "+") {
+        previousNum = previousNum + currentNum;
+    } else if(operator === "-") {
+        previousNum = previousNum - currentNum;
+    } else if(operator === "X") {
+        previousNum = previousNum * currentNum;
+    } else if(operator === "/") {
+        previousNum = previousNum / currentNum;
+    }
+    previousDisplayNumber.textContent = "";
+    currentDisplayNumber.textContent = previousNum;
+}
